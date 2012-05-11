@@ -32,6 +32,8 @@ We use two different verb sets to compare the effect of categorical smoothing an
 
 From the comparison result in \ref{tab-smoothing-comparison}, we see that categorical smoothing provides a significant improvement on the precision on both datasets. It improves the precision on top 1000 set for 0.2858 and lower 1000 set for 0.1673 respectively. We also observe that the improvement of categorical smoothing is more significant on the top 1000 set than on the lower 1000 set.
 
+One thing we must mention is the high disk space cost during the Hadoop testing procedure. On the test set with only 261894 test cases and top 1000 label set, the disk cost is over 30GB, and the processing time is over 1 hour on a laptop. In the testing procedure, we need to emit s-v and v-o pairs for all possible verbs for each test case. Given there are only two features in each document, the disk cost is estimated as $O(verb\_set\_size * number\_of\_test_cases)$. 
+
 \subsection{Comparison between Unigram Prior and Uniform Prior}
 
 \begin{table}[t]
@@ -61,6 +63,15 @@ Difference & 0.0711 & 0.1408 \\
 \end{center}
 \vskip -0.1in
 \end{table}
+
+Based on the Naive Bayes formula, $P(v)$ is the prior probability to predict the verb $v$. In unigram prior, the term is set as $doc_count(v) / total_doc_count$. But in uniform prior, it's set to $1/number_of_unique_verbs$, then canceled in the formula, in which case the formula becomes:
+
+\begin{equation}
+	\hat{v} = \arg\max_v p(s|v)p(o|v)
+\end{equation}
+
+Table \ref{tab-prior-comparison} shows the results of comparison experiments for both priors on two different label set settings. One label set is the top 100 most frequent unstemmed verbs which contains 68 unique stemmed verbs. The other label set is the 1001st to 1100th most frequent unstemmed verbs which contains 96 unique stemmed verbs. From the results, we see that uniform prior performs better than unigram prior on both label set settings. 
+
 
 \subsection{Smoothing Parameter}
 
