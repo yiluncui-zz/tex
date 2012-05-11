@@ -15,7 +15,21 @@ However, there exist duplicated features with different labels. For example, a "
 
 \subsection{Scalability}
 
-% left to Yilun
+Conventional Naive Bayes implementations stores a structure the size of \\
+\\
+$|Features| * |Label|$ \\
+\\
+in memory. In our case, this would be a \\
+\\
+$(|Subject\_Categories|+|Unique\_Subject|\\+|Object\_Categories|+|Object\_Subject|) * |Verbs|$ \\
+
+sized structure. This is unfeasible for the amount of data we are working with. To deal with such a large volume of data we proposed a Naive Bayes algorithm in MapReduce implemented in Hadoop. This method of Naive Bayes is similar to Streaming Naive Bayes and does not require large global structures to be kept.\\
+\\
+At a high level, this requires going over the data 4 times. Once to count the number of occurrences of each verb. Once to count the number of occurrences of each Subject, Object and their categorical counts. Once to train. Once to test and evaluate the results. At the end of each phase, we store some small statistics into the context of our map and reduce jobs such as the number of unique subjects, objects, ontology for the next task.\\
+\\
+We only need to transform counts into conditional probabilities in the testing phase, since conditional probabilities are only needed for each test example. We can do a map emitting $<$Subject\/Object, [TestNum, test\_counts, train\_counts]$>$. This way we can parallelize to the full extent by putting all necessary information to calculate conditional probabilities in the reducer for a given Subject or Object.
+
+This implementation scales well with the task because there are a lot of different possible subjects and objects. Since almost every map phase emits the subject or object as the key, the problem can easily be parallelized. The limit is not reached until the number of reducers equals the number of unique keys.
 
 \subsection{Stemming}
 
@@ -50,7 +64,7 @@ In order to use the category information in the Naive Bayes model, we considered
 
 Instead, we propose another approach, which is also our core contribution to this work. We introduce \emph{categorical smoothing}.\\
 
-Recall with plus one smoothing, we can say that we assume each word appears in each label approximately $\frac{1}{|w|}$ times.\\
+Recall with Laplace smoothing, we can say that we assume each word appears in each label approximately $\frac{1}{|w|}$ times.\\
 
 \begin{equation}
 	P(w|L) = \frac{Count(w|L)+1}{Count(L)+|w|}

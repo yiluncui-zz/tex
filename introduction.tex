@@ -1,3 +1,18 @@
 \section{Introduction}
 
-NELL
+Never Ending Language Learner (NELL) is a learning system that extracts beliefs in the from of text online and tries to understand them. An important way to understand beliefs is to understand different entities and the relationship that ties entities together. Recently, NELL released a dataset that contains \emph{Subject}, \emph{Verb}, \emph{Object} tuples that it extracted from sentences online. We believe this dataset can be used to learn the relationship between entities, more specifically, we believe that the \emph{Verb} component reflects some notion of relationship.\\
+
+To make this a learning task, we attempt to build a system that tries to understand the relationship between the two entities (\emph{Subject} and \emph{Object}) by trying to predict the \emph{Verb} that relates them.
+
+
+Naive Bayes is a simple algorithm that is commonly used to solve text classification problems. Although there are other algorithms like Support Vector Machines which others have shown to preform better than Naive Bayes, the Naive Bayes algorithm scales well because probability calculations involves doing a series sums that can be done in parallel, this is favoured on large datasets. In a Bag of Words model, words are used as features and their word frequency is used as their values. To predict a label $L$ with given words $w$, the optima we try to arrive at is the following:
+
+\begin{equation}
+	\hat{L} = \arg\max_L P(L|w) = \arg\max_L P(L)P(w|L)
+\end{equation}
+
+\begin{equation}
+	\hat{L} = \arg\max_L P(L) \prod_i{P(w_i|L)}
+\end{equation}
+
+When calculating the \emph{maximum likelihood estimator} by simply taking the product of the probabilities given the counts, we can observe that if any word count is zero, the posterior probability immediately becomes zero. There are many ways to smooth the probabilities such that none of the probabilities will be zero. This is calculating the \emph{maximum a posteriori estimator}, it essentially applies some pre-conceived prior assumption on the probabilities that is not present in the count of the words itself.
