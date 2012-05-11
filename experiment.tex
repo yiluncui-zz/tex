@@ -26,9 +26,19 @@ Lower 1k set & 0.6455 & 0.8128 & 0.1673 \\
 \vskip -0.1in
 \end{table}
 
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{pvssmoothing}}
+\caption{Precision Comparison between categorical smoothing and Laplace smoothing}
+\label{fig-p-vs-smoothing}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
 We use two different verb sets to compare the effect of categorical smoothing and Laplace smoothing. One set is the top 1000 most frequent unstemmed verbs in the SVO tuple corpus, the other lower 1000 set is the 10001st to 11000th most frequent unstemmed verbs in the SVO tuple corpus. The top 1000 set contains 538 unique stemmed verbs while the lower 1000 set contains 935 unique stemmed verbs. However, the number of examples in training and testing set are quite different. The top 1000 set has about 206k testing examples while the lower 1000 set has 18.9k testing examples. The numbers of training set have the same proportion.
 
-From the comparison result in \ref{tab-smoothing-comparison}, we see that categorical smoothing provides a significant improvement on the precision on both datasets. It improves the precision on top 1000 set for 0.2858 and lower 1000 set for 0.1673 respectively. We also observe that the improvement of categorical smoothing is more significant on the top 1000 set than on the lower 1000 set.
+From the comparison result in \ref{tab-smoothing-comparison} and \ref{fig-p-vs-smoothing}, we see that categorical smoothing provides a significant improvement on the precision on both datasets. It improves the precision on top 1000 set for 0.2858 and lower 1000 set for 0.1673 respectively. We also observe that the improvement of categorical smoothing is more significant on the top 1000 set than on the lower 1000 set.
 
 One thing we must mention is the high disk space cost during the Hadoop testing procedure. On the test set with only 261894 test cases and top 1000 label set, the disk cost is over 30GB, and the processing time is over 1 hour on a laptop. In the testing procedure, we need to emit s-v and v-o pairs for all possible verbs for each test case. Given there are only two features in each document, the disk cost is estimated as $O(verb\_set\_size * number\_of\_test\_cases)$. 
 
@@ -70,7 +80,7 @@ Based on the Naive Bayes formula, $P(v)$ is the prior probability to predict the
 
 Table \ref{tab-prior-comparison} shows the results of comparison experiments for both priors on two different label set settings. One label set is the top 100 most frequent unstemmed verbs which contains 68 unique stemmed verbs. The other label set is the 1001st to 1100th most frequent unstemmed verbs which contains 96 unique stemmed verbs. From the results, we see that uniform prior performs better than unigram prior on both label set settings. 
 
-The experimental result from comparison between unigram prior and uniform prior is confusing. Unigram model is expected to be a better model than the pure random guessing uniform model. when used as a prior, given other factors are fixed, unigram model should result in a better result. However it's not the truth from our repeating experiments on different label sets. But one observation is that when unigram prior is added, 
+The experimental result from comparison between unigram prior and uniform prior is confusing. Unigram model is expected to be a better model than the pure random guessing uniform model. when used as a prior, given other factors are fixed, unigram model should result in a better result. However it's not the truth from our repeating experiments on different label sets. The two experiments on different label sets got $7\%$ and $14\%$ percent improvement on precision when we change the unigram prior to uniform prior. One observation is that when unigram prior is added, the prediction always prefer those popular verbs like "is" and "have". Even if we remove these verbs as "stop words", the result is still not as good. Though we still can't interpret the reason why uniform prior is better, in our bast model, uniform prior is used.
 
 \subsection{Smoothing Parameter}
 
