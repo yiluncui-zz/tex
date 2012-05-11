@@ -1,8 +1,12 @@
 \section{Conclusion}
 
-The Naive Bayes model works very well on verb prediction task on NELL ontology information and SVO dataset. The dataset has a large number of verbs and hundreds of millions of SVO documents. We use two feature Naive Bayes on Hadoop to predict verbs within a given label set. 
+The Naive Bayes model works very well on verb prediction task on NELL categorical information and SVO dataset. This dataset has a large number of verbs and hundreds of millions of SVO documents. We use two feature Naive Bayes on implemented using Hadoop/Map Reduce to predict verbs within a given label set. 
 
-Instead of Laplace smoothing, we use categorical smoothing to introduce category information of the features into the conditional probability estimators, and into Naive Bayes model. The categorical smoothing significantly improve the precision of this verb prediction Naive Bayes classifier. We also tune smoothing parameters in the categorical smoothing estimator. Though the parameter has effect on the precision, however, the precision is not very sensitive to the parameter within a large range.
+Instead of Laplace smoothing, we use categorical smoothing to introduce category information of the features into the conditional probability estimators, and into the Naive Bayes model. The categorical smoothing significantly improve the precision of this verb prediction Naive Bayes classifier. We also tune smoothing parameters in the categorical smoothing estimator. Though our experiments show that the presence of the parameter has an positive effect on the precision, the precision is not very sensitive to the parameter for a large range of values.
 
-We also compare different prior setting ups for the Naive Bayes classifier. Unigram prior and uniform prior are compared in controlled experiment. Though unigram prior seems smarted and is expected to have a better precision as a guessing, it generally doesn't has as good results as uniform prior. We are still not able to interpret this observation.
+We also compare different prior setting ups for the Naive Bayes classifier. Unigram prior and uniform prior are compared in controlled experiment. Though unigram prior seems to be backed up by theory, statistical meaning and is expected to have a better precision, it generally doesn't has as good a results as uniform prior. We are still not able to provide insightful intuition into this observation.
+
+\section{Future Works}
+
+In our work we created a system that can label a verb given a subject and an object. Our larger goal is to determine the relationship between the subject and the object. We felt that the Verb prediction gives us some insight or vague summary of what the relation could actually be. Verbs are single lettered and they can be quite general. The next steps in this project is to associate verbs with more specific relations like the ones present in the \textbf{NELL RTW} relations collection. This perhaps can be done with verbs used in conjunction with the categorical data collected about the entities.
 
