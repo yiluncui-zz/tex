@@ -1,1 +1,13 @@
-\section{Dataset}
+\section{Dataset, Features, Labels}
+
+The goal of our work is to find the verb relationship between a subject entity and an object entity. Hence to turn this into a classification task, verbs become labels. Subject, objects and their related attributes become features for classification.\\
+\\
+We used two different datasets for this classification task. Our ultimate goal is to classify the belief instances that we find in the \textbf{NELL SVO} dataset. This dataset contains ~220 million \emph{Subject Verb Object Count} tuples that have been mined by NELL. However we use another dataset: \textbf{NELL RTW} formalized dataset to give us metadata over the subjects and objects in the \textbf{NELL SVO} dataset. This dataset provides similar information in the form of \emph{Entity Relation Value} however, it provides hierarchical categories for each of the entities and values.\\
+\\
+The same belief in the two different datasets are represented differently:\\
+In the SVO dataset:\\
+\emph{cat eat fish}\\
+In the RTW dataset:\\
+\emph{concept:animal:cat concept:animalseatfood concept:food:fish}\\
+\\
+We plan to use the categorical data from the \textbf{NELL RTW} dataset as supplementary features for subject and object, giving additional information for classification.\\ We can project the entities in the \textbf{NELL SVO} dataset onto the \textbf{NELL RTW} dataset to find what the categories for each individual subject and object are.\\
