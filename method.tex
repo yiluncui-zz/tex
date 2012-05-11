@@ -43,8 +43,22 @@ Nell has a knowledge base with ontology information for many known entities. Usu
 In order to use the category information in the Naive Bayes model, we considered two approaches. One is to add category counts as independent features. In this way we increase the number of features for each document to above 4. However, the problem is also obvious that the new features are strongly dependent on other features. If a "dog" is in the feature set, "mammal" and "pet" must also be in the feature set. This seriously breaks the conditional independency assumption in Naive Bayes model and gives word with more categories more weights than those with fewer categories, which makes the result difficult to interpret.
 
 
-\subsection{Label Size}
+\subsection{Label Set}
 
 
 
-\subsection{Metric}
+\subsection{Evaluation and Metric}
+
+We use NELL knowledges as labeled true data for training and testing. $10\%$ data is held out for test purpose and the other $90\%$ is training set. Cross validation could be useful but we don't use it because of the large computing consumption.
+
+As a single-label prediction problem, we use precision as the metric to evaluate the classifier. According to the definition of precision,
+
+\begin{equation}
+	p = \frac{number_{truePositive}}{number_{truePositive} + number_{falsePositive}}
+\end{equation}
+
+Besides, different verbs for the same pair of subject and object are considered as different test cases. Since our system always predict one verb for a given subject-object pair, we always lose precision and recall on multi-label cases. Actually, considering it's a single-label prediction on a multi-label dataset, the precision is always equal to the recall.
+
+
+
+
