@@ -90,7 +90,9 @@ Difference & 0.0711 & 0.1408 \\
 \vskip -0.2in
 \end{figure}
 
-We tune the smoothing parameter $alpha$
+We tuned the smoothing parameter $\alpha$ manually with several different values. When $\alpha$ is set to one, it is similar to Laplace smoothing but works on categorical counts instead of global vocabulary size. When $\alpha$ gets larger, the effect of category information is enlarged. From Figure \ref{fig-p-vs-alpha}, we find that when $\alpha$ is extreme small, the precision is decreased. When alpha increases, the precision generally increase, however, when alpha is larger than one, the precision is fixed on 0.7784 and never increases no matter how large it is set to.
+
+We tried $\alpha=0$, and the experiment didn't success because of the zero probability product doesn't make sense. We tried to remove conditional probability of words and keep only the category based probability, but we got only a 0.0188 precision which is like random guess. We also had controlled experiments with Laplace smoothing with $\alpha=1$ and got the precision 0.6074, which is much lower than any alpha settings in categorical smoothing. 
 
 
 
