@@ -15,15 +15,22 @@ However, there exist duplicated features with different labels. For example, a "
 
 \subsection{Scalability}
 
+% left to Yilun
 
 \subsection{Stemming}
 
+The data set for SVO tuples are parsed from sentences and not stemmed. Stemming can help to merge different tuples and reduce both feature set size and label set size. However, considering the database for ontology contains unstemmed words, we can't stem the subject and object words in the data file because that stemming will increase the ontology matching failure rate.
+
+Despite of that, verbs can be stemmed to reduce the possible label set size. Stemmed 
+% left to Yilun
+
 \subsection{Smoothing}
 
-Considering the sparsity of language models, Naive Bayes model usually use smoothing methods. A Dirichlet prior is often used. The Dirichlet prior pulls the features to a uniform distribution at a certain strength according to parameter $\alpha$. In many cases, as a simplification, plus one smoothing is used as a simplified Dirichlet prior with $\alpha=1$.
+Considering the sparsity of language models, Naive Bayes model usually use smoothing methods. A Dirichlet prior is often used. The Dirichlet prior pulls the features to a uniform distribution at a certain strength according to parameter $\alpha$. In many cases, as a simplification, plus one smoothing is used as a simplified Dirichlet prior with $\alpha=1$. We try different settings of $alpha$ parameter. The comparison is shown in the result section.
 
 \subsection{Category Smoothing}
 
+% left to Yilun
 Nell has a knowledge base with ontology information for many known entities. Usually more than one categories are provided for nouns. For example, a dog is a mammal, an animal, an everything and a pet. Some of the categories have containing relations. For the "dog" example, we can describe the category relation as figure \ref{fig-dog-category-example}. As is shown in the figure, some categories like "mammal" are very close to the entity thus describe some attributes of the entity while others like "everything" are very faraway and thus not informative. In our observations, one degree parent categories are usually more helpful.
 
 % \begin{figure}[ht]
@@ -45,7 +52,7 @@ In order to use the category information in the Naive Bayes model, we considered
 
 \subsection{Label Set}
 
-
+% TODO
 
 \subsection{Evaluation and Metric}
 
