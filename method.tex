@@ -11,7 +11,7 @@ The problem can be defined as a text classification problem with the verbs as la
 
 One thing we notice here is that the subject and the object are not symmetric. "Cat eat fish" and "Fish eat cat" should not be considered equal. Based on this intuition, we have two different subject and 
 
-However, there exist duplicated features with different labels. For example, a "cat" can eat a "fish", and can also like a "fish". As a classifier, Naive Bayes only gives the label with the highest conditional probability. It doesn't produce multi labels results for a given input document. In our experiments, when the system make a prediction that is one of the correct labels, there will be one "true positive" and all other possible correct answers will be marked as "false negative".
+However, there exist duplicated features with different labels. For example, a "cat" can eat "fish", and can also like a "fish". As a classifier, Naive Bayes only gives the label with the highest conditional probability. It doesn't produce multi labels results for a given input document. In our experiments, when the system make a prediction that is one of the correct labels, there will be one "true positive" and all other possible correct answers will be marked as "false negative".
 
 \subsection{Scalability}
 
@@ -19,19 +19,18 @@ However, there exist duplicated features with different labels. For example, a "
 
 \subsection{Stemming}
 
-The data set for SVO tuples are parsed from sentences and not stemmed. Stemming can help to merge different tuples and reduce both feature set size and label set size. However, considering the database for ontology contains unstemmed words, we can't stem the subject and object words in the data file because that stemming will increase the ontology matching failure rate.
+The dataset from SVO tuples are parsed from sentences and not stemmed. Stemming can help to merge different tuples and reduce both feature set size and label set size. However, considering the database for ontology contains unstemmed words, we can't stem the subject and object words in the data file because that stemming will increase the ontology matching failure rate.
 
-Despite of that, verbs can be stemmed to reduce the possible label set size. Stemmed 
+Despite of that, verbs can be stemmed to reduce the possible label set size. Stemmed verbs can cannonicalize verbs that actually mean the same thing but are in different tense, for example \emph{provides} vs. \emph{provided}. This can reduce number of labels, prediction error, and also the size of the intermediate data. We used a simple \emph{Porter Stemmer} for this task.
 % left to Yilun
 
 \subsection{Smoothing}
 
-Considering the sparsity of language models, Naive Bayes model usually use smoothing methods. A Dirichlet prior is often used. The Dirichlet prior pulls the features to a uniform distribution at a certain strength according to parameter $\alpha$. In many cases, as a simplification, plus one smoothing is used as a simplified Dirichlet prior with $\alpha=1$. We try different settings of $alpha$ parameter. The comparison is shown in the result section.
+Considering the sparsity of language models, the \emph{Maximum-likelihood Estimator} version of Naive Bayes would likely result in a posterior probability of zero. A Dirichlet prior is often used. The Dirichlet prior pulls the features to a uniform distribution at a certain strength according to parameter $\alpha$. In many cases, as a simplification, plus one smoothing is used as a simplified Dirichlet prior with $\alpha=1$.
 
-\subsection{Category Smoothing}
+\subsection{Categorical Smoothing}
 
-% left to Yilun
-Nell has a knowledge base with ontology information for many known entities. Usually more than one categories are provided for nouns. For example, a dog is a mammal, an animal, an everything and a pet. Some of the categories have containing relations. For the "dog" example, we can describe the category relation as figure \ref{fig-dog-category-example}. As is shown in the figure, some categories like "mammal" are very close to the entity thus describe some attributes of the entity while others like "everything" are very faraway and thus not informative. In our observations, one degree parent categories are usually more helpful.
+As mentioned before, NELL has a knowledge base with ontology information for many known entities. Usually more than one categories are provided for nouns. For example, a dog is a mammal, an animal, an everything and a pet. Some of the categories have containing relations. For the ``dog" example, we can describe the category relation as figure \ref{fig-dog-category-example}. As is shown in the figure, some categories like "mammal" are very close to the entity thus describe some attributes of the entity while others like "everything" are very faraway and thus not informative. In our observations, one degree parent categories are usually more helpful.
 
 % \begin{figure}[ht]
 % \vskip 0.2in
@@ -47,8 +46,23 @@ Nell has a knowledge base with ontology information for many known entities. Usu
 % \vskip -0.2in
 % \end{figure}
 
-In order to use the category information in the Naive Bayes model, we considered two approaches. One is to add category counts as independent features. In this way we increase the number of features for each document to above 4. However, the problem is also obvious that the new features are strongly dependent on other features. If a "dog" is in the feature set, "mammal" and "pet" must also be in the feature set. This seriously breaks the conditional independency assumption in Naive Bayes model and gives word with more categories more weights than those with fewer categories, which makes the result difficult to interpret.
+In order to use the category information in the Naive Bayes model, we considered two approaches. One naive approach is to add category counts as independent features. In this way we increase the number of features for each document to above 4. However, this implementation heavily violates the strong dependent nature of these features. If a ``dog" is in the feature set, ``mammal" and ``pet" must also be in the feature set. But ``dog'', ``mammal'', and ``pet'' are highly correlated in reality. This means the model will have very high bias to begin with and probably will not work well.
 
+Instead, we propose another approach, which is also our core contribution to this work. We introduce \emph{categorical smoothing}.\\
+
+Recall with plus one smoothing, we can say that we assume each word appears in each label approximately $\frac{1}{|w|}$ times.\\
+
+\begin{equation}
+	P(w|L) = \frac{Count(w|L)+1}{Count(L)+|w|}
+\end{equation}
+
+With categorical smoothing, we know that the word is a member of a given category, thus its category can represent this word, so we assume that they appear $\frac{category(w)}{|categories|}$ of times. 
+
+\begin{equation}
+	P(w|L) = \frac{Count(w|L)+Count(category(w))}{Count(L)+\sum_i(category(i))}
+\end{equation}
+
+This method is independent of what the label is. This is a way to differentiate the different categories subjects and objects come from. Beliefs within the same category will not be effected by this type of smoothing because the weights applied are the same and hence only $Count(w|L)$ differentiates, but beliefs from different categories will be heavily influenced by this smoothing.
 
 \subsection{Label Set}
 
@@ -56,7 +70,7 @@ In order to use the category information in the Naive Bayes model, we considered
 
 \subsection{Evaluation and Metric}
 
-We use NELL knowledges as labeled true data for training and testing. $10\%$ data is held out for test purpose and the other $90\%$ is training set. Cross validation could be useful but we don't use it because of the large computing consumption.
+We use NELL beliefs as labeled true data for training and testing. $10\%$ data is held out for test purpose and the other $90\%$ is training set. Cross validation could be a more useful technique but we don't intend to use it because it will require repetitive runs over the data and will be very computationally costly.
 
 As a single-label prediction problem, we use precision as the metric to evaluate the classifier. According to the definition of precision,
 
