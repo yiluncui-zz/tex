@@ -48,9 +48,49 @@ We use two different verb sets to compare the effect of categorical smoothing an
 
 From the comparison result in \ref{tab-smoothing-comparison}, we see that categorical smoothing provides a significant improvement on the precision on both datasets. It improves the precision on top 1000 set for 0.2858 and lower 1000 set for 0.1673 respectively. We also observe that the improvement of categorical smoothing is more significant on the top 1000 set than on the lower 1000 set.
 
-\subsection{Comparison between with and without Prior}
+\subsection{Comparison between Unigram Prior and Uniform Prior}
 
-\subsection{Smoothing Strategies}
+\begin{table}[t]
+\caption{Precision Comparison between Unigram Prior and Uniform Prior}
+\label{tab-prior-comparison}
+\vskip 0.15in
+\begin{center}
+\begin{small}
+\begin{sc}
+\begin{tabular}{l|cc}
+\hline
+\abovespace \belowspace
+Data set & Top 100 set & Lower 100 set \\
+\hline
+\abovespace
+unigram prior & 0.8603 & 0.6376 \\
+\belowspace
+uniform prior & 0.9314 & 0.7784 \\
+\hline
+\abovespace
+\belowspace
+Difference & 0.0711 & 0.1408 \\
+\hline
+\end{tabular}
+\end{sc}
+\end{small}
+\end{center}
+\vskip -0.1in
+\end{table}
+
+\subsection{Smoothing Parameter}
+
+\begin{figure}[ht]
+\vskip 0.2in
+\begin{center}
+\centerline{\includegraphics[width=\columnwidth]{pvsalpha}}
+\caption{Precision vs. Smoothing parameter in Categorical Smoothing}
+\label{fig-p-vs-alpha}
+\end{center}
+\vskip -0.2in
+\end{figure}
+
+We tune the smoothing parameter $alpha$
 
 
 
