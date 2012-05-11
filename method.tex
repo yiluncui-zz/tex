@@ -3,11 +3,24 @@
 \subsection{Naive Bayes}
 % mention prior
 
+The problem can be defined as a text classification problem with the verbs as labels and the subject and object as features. For each SVO document, the number of features is fixed as two. However, there exist duplicated features with different labels. For example, 
+
+
+\subsection{Scalability}
+
+
 \subsection{Stemming}
 
 \subsection{Smoothing}
 
 \subsection{Category Smoothing}
+
+Nell has a knowledge base with ontology information for many known entities. Usually more than one categories are provided for nouns. For example, a dog is a mammal, an animal, an everything and a pet. Some of the categories have containing relations. For the "dog" example, we can describe the category relation as figure \ref{dog-category-example}. As is shown in the figure, some categories like "mammal" are very close to the entity thus describe some attributes of the entity while others like "everything" are very faraway and thus not informative. In our observations, one degree parent categories are usually more helpful.
+
+%\figure{dog-category-example}
+
+In order to use the category information in the Naive Bayes model, we considered two approaches. One is to add category counts as independent features. In this way we increase the number of features for each document to above 4. However, the problem is also obvious that the new features are strongly dependent on other features. If a "dog" is in the feature set, "mammal" and "pet" must also in there. This seriously breaks the independency assumption in Naive Bayes model, which makes the result difficult to interpret.
+
 
 \subsection{Label Size}
 
