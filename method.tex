@@ -20,13 +20,25 @@ However, there exist duplicated features with different labels. For example, a "
 
 \subsection{Smoothing}
 
-Considering the sparsity of language models, Naive Bayes model usually use smoothing methods. A Dirichlet prior is 
+Considering the sparsity of language models, Naive Bayes model usually use smoothing methods. A Dirichlet prior is often used. The Dirichlet prior pulls the features to a uniform distribution at a certain strength according to parameter $\alpha$. In many cases, as a simplification, plus one smoothing is used as a simplified Dirichlet prior with $\alpha=1$.
 
 \subsection{Category Smoothing}
 
-Nell has a knowledge base with ontology information for many known entities. Usually more than one categories are provided for nouns. For example, a dog is a mammal, an animal, an everything and a pet. Some of the categories have containing relations. For the "dog" example, we can describe the category relation as figure \ref{dog-category-example}. As is shown in the figure, some categories like "mammal" are very close to the entity thus describe some attributes of the entity while others like "everything" are very faraway and thus not informative. In our observations, one degree parent categories are usually more helpful.
+Nell has a knowledge base with ontology information for many known entities. Usually more than one categories are provided for nouns. For example, a dog is a mammal, an animal, an everything and a pet. Some of the categories have containing relations. For the "dog" example, we can describe the category relation as figure \ref{fig-dog-category-example}. As is shown in the figure, some categories like "mammal" are very close to the entity thus describe some attributes of the entity while others like "everything" are very faraway and thus not informative. In our observations, one degree parent categories are usually more helpful.
 
-%\figure{dog-category-example}
+% \begin{figure}[ht]
+% \vskip 0.2in
+% \begin{center}
+% \centerline{\includegraphics[width=\columnwidth]{icml_numpapers}}
+% \caption{Historical locations and number of accepted papers for International
+%   Machine Learning Conferences (ICML 1993 -- ICML 2008) and
+%   International Workshops on Machine Learning (ML 1988 -- ML
+%   1992). At the time this figure was produced, the number of
+%   accepted papers for ICML 2008 was unknown and instead estimated.}
+% \label{fig-dog-category-example}
+% \end{center}
+% \vskip -0.2in
+% \end{figure}
 
 In order to use the category information in the Naive Bayes model, we considered two approaches. One is to add category counts as independent features. In this way we increase the number of features for each document to above 4. However, the problem is also obvious that the new features are strongly dependent on other features. If a "dog" is in the feature set, "mammal" and "pet" must also be in the feature set. This seriously breaks the conditional independency assumption in Naive Bayes model and gives word with more categories more weights than those with fewer categories, which makes the result difficult to interpret.
 
