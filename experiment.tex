@@ -2,7 +2,18 @@
 
 \subsection{Experimental Implementation}
 
-Conventional Naive Bayes implementations the storage of a $|Features| * |Label|$ structure in memory. In our classification case, this would be a $(|Subject_Categories|+|Unique_Subject|+|Object_Categories|+|Object_Subject|) * |Verbs|$ sized structure. This is unfeasible for the amount of data we are working with. To deal with such a large volume of data we proposed a Naive Bayes algorithm in MapReduce implemented in Hadoop. This method of Naive Bayes is similar to Streaming Naive Bayes and does not require large global structures to be kept.
+Conventional Naive Bayes implementations the storage of a \\
+$|Features| * |Label|$ \\
+\\
+structure in memory. In our classification case, this would be a \\
+\\
+$(|Subject\_Categories|+|Unique\_Subject|\\+|Object\_Categories|+|Object\_Subject|) * |Verbs|$ \\
+
+sized structure. This is unfeasible for the amount of data we are working with. To deal with such a large volume of data we proposed a Naive Bayes algorithm in MapReduce implemented in Hadoop. This method of Naive Bayes is similar to Streaming Naive Bayes and does not require large global structures to be kept.\\
+\\
+At a high level, this requires going over the data 4 times. Once to count the number of occurrences of each verb. Once to count the number of occurrences of each Subject, Object and their categorical counts. Once to train. Once to test and evaluate the results. At the end of each phase, we store some small statistics into the context of our map and reduce jobs such as the number of unique subjects, objects, ontology for the next task.\\
+\\
+We only need to transform counts into conditional probabilities in the testing phase, since conditional probabilities are only needed for each test example. We can do a map emitting $<$Subject\/Object, [TestNum, test\_counts, train\_counts]$>$. This way we can parallelize to the full extent by putting all necessary information to calculate conditional probabilities in the reducer for a given Subject or Object. 
 
 \subsection{Result Comparison}
 
