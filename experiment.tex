@@ -1,5 +1,9 @@
 \section{Experiment}
 
+\subsection{Experimental Implementation}
+
+Conventional Naive Bayes implementations the storage of a $|Features| * |Label|$ structure in memory. In our classification case, this would be a $(|Subject_Categories|+|Unique_Subject|+|Object_Categories|+|Object_Subject|) * |Verbs|$ sized structure. This is unfeasible for the amount of data we are working with. To deal with such a large volume of data we proposed a Naive Bayes algorithm in MapReduce implemented in Hadoop. This method of Naive Bayes is similar to Streaming Naive Bayes and does not require large global structures to be kept.
+
 \subsection{Result Comparison}
 
 \subsection{Prior}
