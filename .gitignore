@@ -1,6 +1,6 @@
 *.aux
 *.log
 *.sync*
-*.pdf
+report.pdf
 *.out
 subfigure.sty
