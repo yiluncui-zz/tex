@@ -1,5 +1,6 @@
 \section*{Abstract}
 
-Relation prediction given the subject and the object is a new topic in Never Ending Language Learning project. Our prediction is based on a large amount of SVO tuple corpus. We predict the verb based on a Naive Bayes classifier. We propose strategies about stemming, prior and label sizes. We also propose a method to introduce category information into the Naive Bayes model.
+Relation prediction given the subject and the object is a new topic in the Never Ending Language Learning project. Our prediction mechanism uses large amounts of tuples from the \textbf{NELL SVO} corpus. We turned this task into a classification task having the verb as the label, and variants of the Naive Bayes classifier as our classification algorithm, all written in Map Reduce to accommodate for the data volume. We proposed strategies such as stemming, prior modifications. We also proposed a method to introduce categorical information into the Naive Bayes model via methods of smoothing. We evaluated our classifier and our techniques on different total possible labels.\\
+\\
 Experiments results comparing these strategies show our category approach significantly improve the accuracy of the Naive Bayes model.
 
